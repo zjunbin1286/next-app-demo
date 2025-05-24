@@ -1,8 +1,9 @@
 "use client";
 
-import React from "react";
-import { Space, Table, Tag } from "antd";
+import React, { useState } from "react";
+import { Button, message, Modal, Space, Table, Tag } from "antd";
 import type { TableProps } from "antd";
+import modal from "antd/es/modal";
 
 interface DataType {
   key: string;
@@ -17,6 +18,7 @@ const columns: TableProps<DataType>["columns"] = [
     title: "姓名",
     dataIndex: "name",
     key: "name",
+
     render: (text) => <a>{text}</a>,
   },
   {
@@ -85,6 +87,51 @@ const data: DataType[] = [
   },
 ];
 
-const App: React.FC = () => <Table<DataType> columns={columns} dataSource={data} />;
+const onClick = () => {
+  message.success("Click on the button");
+}
+
+const App: React.FC = () => {
+  const [isModalOpen, setIsModalOpen] = useState(false);
+
+  const showModal = () => {
+    setIsModalOpen(true);
+  };
+
+  const handleOk = () => {
+    setIsModalOpen(false);
+  };
+
+  const handleCancel = () => {
+    setIsModalOpen(false);
+  };
+  return <>
+    <Table<DataType> columns={columns} dataSource={data}/>
+    <Button type="primary" onClick={() => onClick()}>哈哈哈</Button>
+    <Button
+      onClick={async () => {
+        Modal.success({
+          content: 'some messages...some messages...',
+        });
+      }}
+    >
+      Confirm
+    </Button>
+    <Button type="primary" onClick={showModal}>
+      Open Modal
+    </Button>
+    <Modal
+      title="Basic Modal"
+      closable={{ 'aria-label': 'Custom Close Button' }}
+      open={isModalOpen}
+      onOk={handleOk}
+      onCancel={handleCancel}
+    >
+      <p>Some contents...</p>
+      <p>Some contents...</p>
+      <p>Some contents...</p>
+    </Modal>
+  </>;
+}
 
 export default App;
